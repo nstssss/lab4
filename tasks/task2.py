@@ -14,6 +14,20 @@ class Task2():
             return True
         else: return False
 
+    def get_values(self, n : int):
+        gen = self.generator()
+        result = []
+        for _ in range(n):
+            sides = gen[_]
+            result.append((sides, self.triangle(sides)))
+        return result
+task2 = Task2(2, 21)
+res = task2.get_values(20)
+cnt = 1
+for r in res:
+    print(f"{cnt} - ",r)
+    cnt+=1
+
 # task2 = Task2(2, 21)
 # gen = task2.generator()
 # for sides in gen:
@@ -39,19 +53,22 @@ class Task2_parall():
         else:
             return False
 
-    def parallel_execution(self):
+    def get_values(self, n : int):
         gen = self.generator()
+        result = []
+        for _ in range(n):
+            sides = gen[_]
+            result.append((sides, self.triangle(sides)))
+        return result
+
+    def parallel_execution(self, n: int):
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = {executor.submit(self.triangle, sides): sides for sides in gen}
-            results = []
-            for f in concurrent.futures.as_completed(future):
-                sides = future[f]
-                is_triangle = f.result()
-                results.append((sides, is_triangle))
-
-            return results
-
-# task2_p = Task2_parall(2, 21)
-# res = task2_p.parallel_execution()
-# for r in res:
-#     print(r)
+            future = executor.submit(self.get_values, n)
+            return future.result()
+print("ВТОРОЙ КЛАСС")
+task2_p = Task2_parall(2, 21)
+res = task2_p.parallel_execution(20)
+cnt = 1
+for r in res:
+    print(f"{cnt} - ", r)
+    cnt += 1
