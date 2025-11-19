@@ -13,9 +13,9 @@ class Task1:
             yield 0.5 * x - 2
             x += STEP
 
-    def get_values(self, n : int):
+    def get_values(self):
         g = self.generator()
-        return [next(g) for _ in range(n)]
+        return [next(g) for _ in range(self.n)]
 
 class Task1_parall:
     def __init__(self, start: int, end: int):
@@ -34,10 +34,4 @@ class Task1_parall:
             values = list(executor.map(self.calculate_value, range(n)))
             return values
 
-task1 = Task1_parall(1, 101)
-res = task1.parallel_execution(50)
-cnt = 1
-for r in res:
-    print(f"{cnt} - ",r)
-    cnt+= 1
 
