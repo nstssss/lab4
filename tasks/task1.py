@@ -22,21 +22,17 @@ class Task1_parall:
         self.start = start
         self.end = end
 
-    def generator(self):
-        x = self.start
-        while x <= self.end:
-            yield 0.5 * x - 2
-            x += STEP
-
-    def get_values(self, n : int):
-        g = self.generator()
-        numbers = (next(g) for _ in range(n))
-        return numbers
+    def calculate_value(self, i):
+        x = self.start + i * STEP
+        x = self.start + i * STEP
+        if x > self.end:
+            return None
+        return 0.5 * x - 2
 
     def parallel_execution(self, n):
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(self.get_values, n)
-            return future.result()
+            values = list(executor.map(self.calculate_value, range(n)))
+            return values
 
 task1 = Task1_parall(1, 101)
 res = task1.parallel_execution(50)

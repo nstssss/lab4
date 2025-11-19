@@ -36,35 +36,33 @@ for r in res:
 #         print("Образует")
 #     else:
 #         print("Не образует")
-class Task2_parall():
+import concurrent.futures
+
+
+class Task2_parall:
     def __init__(self, start: int, end: int):
         self.start = start
         self.end = end
 
-    def generator(self):
-        g = [(i, j, k) for i in range(self.start, self.end) for j in range(self.start, self.end) for k in
-             range(self.start, self.end)]
-        return g
+    def check_triangle(self, i):
+        range_size = self.end - self.start
 
-    def triangle(self, sides):
-        a, b, c = sides
-        if (a < b + c and b < a + c and c < a + b):
-            return True
-        else:
-            return False
+        a = self.start + (i // (range_size * range_size))
+        b = self.start + ((i // range_size) % range_size)
+        c = self.start + (i % range_size)
 
-    def get_values(self, n : int):
-        gen = self.generator()
-        result = []
-        for _ in range(n):
-            sides = gen[_]
-            result.append((sides, self.triangle(sides)))
-        return result
+        if any(side >= self.end for side in (a, b, c)):
+            return None
 
-    def parallel_execution(self, n: int):
+        sides = (a, b, c)
+        is_triangle = all([a < b + c, b < a + c, c < a + b])
+        return (sides, is_triangle)
+
+    def parallel_execution(self, n):
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(self.get_values, n)
-            return future.result()
+            results = list(executor.map(self.check_triangle, range(n)))
+        return results
+
 print("ВТОРОЙ КЛАСС")
 task2_p = Task2_parall(2, 21)
 res = task2_p.parallel_execution(20)
