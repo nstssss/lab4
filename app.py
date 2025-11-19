@@ -210,7 +210,12 @@ class Task3Tab(QWidget):
         self.numbers_input = QLineEdit()
         input_layout.addWidget(self.numbers_input)
         layout.addLayout(input_layout)
-
+        label_cnt = QLabel("Введите искомое количество максимальных значений")
+        label_cnt.setFont(label_font)
+        input_layout.addWidget(label_cnt)
+        self.cnt = QLineEdit()
+        self.cnt.setText("4")
+        input_layout.addWidget(self.cnt)
         # Кнопка выполнения
         self.calculate_btn = QPushButton("Найти")
         self.calculate_btn.clicked.connect(self.find_max_numbers)
@@ -229,9 +234,9 @@ class Task3Tab(QWidget):
             if not input_text:
                 self.result_text.setText("Введите числа!")
                 return
-
-            task3 = Task3()
-            result = task3.write_max(input_text)
+            n = int(self.cnt.text())
+            task3 = Task3(input_text, n)
+            result = task3.write_max()
 
             result_text = f"4 наибольших: {result}"
             self.result_text.setText(result_text)
