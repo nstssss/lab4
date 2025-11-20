@@ -1,4 +1,5 @@
 import concurrent.futures
+import time
 STEP = 0.01
 
 class Task1:
@@ -35,3 +36,24 @@ class Task1_parall:
             return values
 
 
+def main():
+    start_value = 0
+    end_value = 50000
+    n = int((end_value - start_value) / STEP)
+
+    print(f"Количество вычислений: {n}")
+
+    start = time.perf_counter()
+    Task1(start_value, end_value, n).get_values()
+    exec_time_base = time.perf_counter() - start
+
+    start = time.perf_counter()
+    Task1_parall(start_value, end_value).parallel_execution(n)
+    exec_time_parallel = time.perf_counter() - start
+
+    print(f"Task1 (вычисление f(x) = 0.5x - 2):")
+    print(f"  Обычный:      {exec_time_base:.6f} сек")
+    print(f"  Параллельный: {exec_time_parallel:.6f} сек")
+    print(f"  Быстрее в {exec_time_base / exec_time_parallel:.6f} раз\n")
+if __name__ == "__main__":
+    main()

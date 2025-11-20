@@ -1,4 +1,5 @@
 import concurrent.futures
+import time
 
 class Task2:
     def __init__(self, start: int, end: int, n: int):
@@ -48,3 +49,25 @@ class Task2_parall:
             results = list(executor.map(self.check_triangle, range(self.n)))
         return results
 
+def main():
+    start_value = 2
+    end_value = 60
+    n = 50000
+
+    print(f"Количество проверок: {n}")
+
+    start = time.perf_counter()
+    Task2(start_value, end_value, n).get_values()
+    exec_time_base = time.perf_counter() - start
+
+    start = time.perf_counter()
+    Task2_parall(start_value, end_value, n).parallel_execution(n)
+    exec_time_parallel = time.perf_counter() - start
+
+    print(f"Task2 (проверка треугольников):")
+    print(f"  Обычный:      {exec_time_base:.6f} сек")
+    print(f"  Параллельный: {exec_time_parallel:.6f} сек")
+    print(f"  Быстрее в {exec_time_base / exec_time_parallel:.6f} раз\n")
+
+if __name__ == "__main__":
+    main()
