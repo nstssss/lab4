@@ -25,7 +25,6 @@ class Task1_parall:
 
     def calculate_value(self, i):
         x = self.start + i * STEP
-        x = self.start + i * STEP
         if x > self.end:
             return None
         return 0.5 * x - 2
